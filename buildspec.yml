@@ -1,0 +1,32 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18 # or any version you are using
+    commands:
+      - echo "Installing dependencies..."
+      - npm install -g @nestjs/cli
+      - npm install
+
+  pre_build:
+    commands:
+      - echo "Running pre-build steps..."
+      - echo "Environment: $NODE_ENV"
+
+  build:
+    commands:
+      - echo "Building the NestJS project..."
+      - npm run build
+
+  post_build:
+    commands:
+      - echo "Build completed on `date`"
+      # Uncomment if deploying to S3 or ECS
+      # - echo "Preparing artifacts for deployment..."
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: dist # Output directory after build
+  discard-paths: yes
