@@ -26,9 +26,9 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - ls -la   # Check if Dockerfile is there
-      - docker build -t public.ecr.aws/o7c6n0a9/nodejs-project:latest .
-      - docker tag public.ecr.aws/o7c6n0a9/nodejs-project:latest public.ecr.aws/o7c6n0a9/nodejs-project:$IMAGE_TAG
+      - ls -la   # Check if Dockerfile is found
+      - docker build -t $REPOSITORY_URL:latest .
+      - docker tag $REPOSITORY_URL:latest $REPOSITORY_URL:$IMAGE_TAG
 
   post_build:
     commands:
