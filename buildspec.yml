@@ -1,32 +1,48 @@
 version: 0.2
 
+env:
+  variables:
+    REGION: us-east-1
+    REPOSITORY_URL: public.ecr.aws/o7c6n0a9/nodejs-project
+    DOCKER_CONTAINER_NAME: nodejs-project-ecr-container
+
 phases:
   install:
     runtime-versions:
-      nodejs: 18 # or any version you are using
+      nodejs: 18
     commands:
-      - echo "Installing dependencies..."
-      - npm install -g @nestjs/cli
+      - echo Installing dependencies...
       - npm install
 
   pre_build:
     commands:
-      - echo "Running pre-build steps..."
-      - echo "Environment: $NODE_ENV"
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - aws ecr-public get-login-password --region $REGION | docker login --username AWS --password-stdin public.ecr.aws/o7c6n0a9
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+      - echo Image tag is $IMAGE_TAG
 
   build:
     commands:
-      - echo "Building the NestJS project..."
-      - npm run build
+      - echo Build started on `date`
+      - echo Building the project...
+      - echo You can replace this with any actual build steps if needed
+      - echo Building the Docker image...
+      - docker build -t $REPOSITORY_URL:latest .
+      - docker tag $REPOSITORY_URL:latest $REPOSITORY_URL:$IMAGE_TAG
 
   post_build:
     commands:
-      - echo "Build completed on `date`"
-      # Uncomment if deploying to S3 or ECS
-      # - echo "Preparing artifacts for deployment..."
+      - echo Build completed on `date`
+      - echo Pushing Docker images to ECR...
+      - docker push $REPOSITORY_URL:latest
+      - docker push $REPOSITORY_URL:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - printf '[{"name":"%s","imageUri":"%s"}]' "$DOCKER_CONTAINER_NAME" "$REPOSITORY_URL:$IMAGE_TAG" > imagedefinitions.json
+      - echo Image Definitions:
+      - cat imagedefinitions.json
 
 artifacts:
   files:
-    - '**/*'
-  base-directory: dist # Output directory after build
-  discard-paths: yes
+    - imagedefinitions.json
+    - target/nodejs-project-aws-deploy.jar
