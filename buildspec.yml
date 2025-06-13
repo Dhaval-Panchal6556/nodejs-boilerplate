@@ -10,6 +10,7 @@ phases:
   install:
     runtime-versions:
       nodejs: 18
+      docker: 20
     commands:
       - echo Installing dependencies...
       - npm install
@@ -25,6 +26,8 @@ phases:
   build:
     commands:
       - echo Build started on `date`
+      - ls -la   # See if Dockerfile exists
+      - cat Dockerfile || echo "No Dockerfile found!"
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URL:latest .
       - docker tag $REPOSITORY_URL:latest $REPOSITORY_URL:$IMAGE_TAG
