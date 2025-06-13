@@ -3,7 +3,7 @@ version: 0.2
 env:
   variables:
     REGION: us-east-1
-    REPOSITORY_URL: public.ecr.aws/o7c6n0a9/nodejs-project
+    REPOSITORY_URL: 664418951912.dkr.ecr.us-east-1.amazonaws.com/backend-nodejs
     DOCKER_CONTAINER_NAME: nodejs-project-ecr-container
 
 phases:
@@ -18,7 +18,7 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
-      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/o7c6n0a9 || { echo "Docker login failed"; exit 1; }
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 664418951912.dkr.ecr.us-east-1.amazonaws.com || { echo "Docker login failed"; exit 1; }
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
       - echo Image tag is $IMAGE_TAG
 
