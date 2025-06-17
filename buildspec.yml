@@ -25,10 +25,8 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - echo Checking Dockerfile...
-      - ls -la
-      - cat Dockerfile
       - echo Building the Docker image...
+      - ls -la   # Check if Dockerfile is found logs
       - docker build -t $REPOSITORY_URL:latest .
       - docker tag $REPOSITORY_URL:latest $REPOSITORY_URL:$IMAGE_TAG
 
