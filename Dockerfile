@@ -1,4 +1,4 @@
-FROM public.ecr.aws/o7c6n0a9/nodejs-docker:latest
+FROM public.ecr.aws/o7c6n0a9/nodejs-docker:18
 
 WORKDIR /app
 
