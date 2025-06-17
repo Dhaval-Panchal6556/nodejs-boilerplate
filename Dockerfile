@@ -1,4 +1,4 @@
-FROM 664418951912.dkr.ecr.us-east-1.amazonaws.com/backend-nodejs:latest
+FROM node:18-alpine
 
 WORKDIR /app
 
