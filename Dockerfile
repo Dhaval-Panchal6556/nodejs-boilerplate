@@ -7,7 +7,7 @@ RUN npm install
 
 COPY . .
 
-#Expose port of 3000
+#Expose port of 3000 enable
 EXPOSE 3000
 
 CMD [ "npm", "run" , "start:dev" ]
